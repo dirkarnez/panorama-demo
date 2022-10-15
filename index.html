@@ -1,199 +1,72 @@
-
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-		<link type="text/css" rel="stylesheet" href="https://threejs.org/examples/main.css">
-	</head>
-	<body>
-		<div id="container"></div>
-
-		<!-- Import maps polyfill -->
-		<!-- Remove this when import maps will be widely supported -->
-		<script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
-
-		<script type="importmap">
-			{
-				"imports": {
-					"three": "https://threejs.org/build/three.module.js",
-					"three/addons/": "https://threejs.org/examples/jsm/"
-				}
-			}
-		</script>
-<script type="module">
-
-			import * as THREE from 'three';
-
-			let camera, scene, renderer;
-
-			let isUserInteracting = false,
-				onPointerDownMouseX = 0, onPointerDownMouseY = 0,
-				lon = 0, onPointerDownLon = 0,
-				lat = 0, onPointerDownLat = 0,
-				phi = 0, theta = 0;
-
-			init();
-			animate();
-
-			function init() {
-
-				const container = document.getElementById( 'container' );
-
-				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1100 );
-
-				scene = new THREE.Scene();
-
-				const geometry = new THREE.SphereGeometry( 500, 60, 40 );
-				// invert the geometry on the x-axis so that all of the faces point inward
-				geometry.scale( - 1, 1, 1 );
-
-				const texture = new THREE.TextureLoader().load( './IMG_20220927_164639_00_002_2022-10-13_15-31-37_screenshot.jpg' );
-				const material = new THREE.MeshBasicMaterial( { map: texture } );
-
-				const mesh = new THREE.Mesh( geometry, material );
-
-				scene.add( mesh );
-
-				renderer = new THREE.WebGLRenderer();
-				renderer.setPixelRatio( window.devicePixelRatio );
-				renderer.setSize( window.innerWidth, window.innerHeight );
-				container.appendChild( renderer.domElement );
-
-				container.style.touchAction = 'none';
-				container.addEventListener( 'pointerdown', onPointerDown );
-
-				document.addEventListener( 'wheel', onDocumentMouseWheel );
-
-				//
-
-				document.addEventListener( 'dragover', function ( event ) {
-
-					event.preventDefault();
-					event.dataTransfer.dropEffect = 'copy';
-
-				} );
-
-				document.addEventListener( 'dragenter', function () {
-
-					document.body.style.opacity = 0.5;
-
-				} );
-
-				document.addEventListener( 'dragleave', function () {
-
-					document.body.style.opacity = 1;
-
-				} );
-
-				document.addEventListener( 'drop', function ( event ) {
-
-					event.preventDefault();
-
-					const reader = new FileReader();
-					reader.addEventListener( 'load', function ( event ) {
-
-						material.map.image.src = event.target.result;
-						material.map.needsUpdate = true;
-
-					} );
-					reader.readAsDataURL( event.dataTransfer.files[ 0 ] );
-
-					document.body.style.opacity = 1;
-
-				} );
-
-				//
-
-				window.addEventListener( 'resize', onWindowResize );
-
-			}
-
-			function onWindowResize() {
-
-				camera.aspect = window.innerWidth / window.innerHeight;
-				camera.updateProjectionMatrix();
-
-				renderer.setSize( window.innerWidth, window.innerHeight );
-
-			}
-
-			function onPointerDown( event ) {
-
-				if ( event.isPrimary === false ) return;
-
-				isUserInteracting = true;
-
-				onPointerDownMouseX = event.clientX;
-				onPointerDownMouseY = event.clientY;
-
-				onPointerDownLon = lon;
-				onPointerDownLat = lat;
-
-				document.addEventListener( 'pointermove', onPointerMove );
-				document.addEventListener( 'pointerup', onPointerUp );
-
-			}
-
-			function onPointerMove( event ) {
-
-				if ( event.isPrimary === false ) return;
-
-				lon = ( onPointerDownMouseX - event.clientX ) * 0.1 + onPointerDownLon;
-				lat = ( event.clientY - onPointerDownMouseY ) * 0.1 + onPointerDownLat;
-
-			}
-
-			function onPointerUp() {
-
-				if ( event.isPrimary === false ) return;
-
-				isUserInteracting = false;
-
-				document.removeEventListener( 'pointermove', onPointerMove );
-				document.removeEventListener( 'pointerup', onPointerUp );
-
-			}
-
-			function onDocumentMouseWheel( event ) {
-
-				const fov = camera.fov + event.deltaY * 0.05;
-
-				camera.fov = THREE.MathUtils.clamp( fov, 10, 75 );
-
-				camera.updateProjectionMatrix();
-
-			}
-
-			function animate() {
-
-				requestAnimationFrame( animate );
-				update();
-
-			}
-
-			function update() {
-
-				if ( isUserInteracting === false ) {
-
-					lon += 0.1;
-
-				}
-
-				lat = Math.max( - 85, Math.min( 85, lat ) );
-				phi = THREE.MathUtils.degToRad( 90 - lat );
-				theta = THREE.MathUtils.degToRad( lon );
-
-				const x = 500 * Math.sin( phi ) * Math.cos( theta );
-				const y = 500 * Math.cos( phi );
-				const z = 500 * Math.sin( phi ) * Math.sin( theta );
-
-				camera.lookAt( x, y, z );
-
-				renderer.render( scene, camera );
-
-			}
-
-		</script>
-	</body>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width, shrink-to-fit=no">
+    <style>
+      html, body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: #000;
+      }
+
+      #desc-container {
+        max-width: 400px;
+        max-height: 400px;
+        min-width: 200px;
+        min-height: 250px;
+        background: #fff;
+        color: #000;
+        border-radius: 3px;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+
+        border-radius: .5em;
+        padding: 2.75em 2.5em;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="desc-container" class="data-card" style="display:none">
+      <header>
+        <h1>2010</h1>
+      </header>
+      <p style="font-size: 1.5rem;"> 
+        第二期廠房正式投產，同年產品拓展至美國市場
+      </p>
+      <p style="font-size: 1.5rem;"> 
+        2nd Phase factory in production, products entered US market
+      </p>
+    </div>
+
+    <script src="https://pchen66.github.io/js/three/three.min.js"></script>
+    <script src="https://pchen66.github.io/js/panolens/panolens.min.js"></script>
+
+    <script>
+      const viewer = new PANOLENS.Viewer( { output: 'console', autoHideInfospot: false } );
+
+      const infospot1 =  new PANOLENS.Infospot( 300, PANOLENS.DataImage.Info, false );
+      infospot1.position.set( 5000.00, -665.23, -3996.49 );
+      infospot1.addHoverElement( document.getElementById( 'desc-container' ), 200 );
+      infospot1.show();
+
+      const infospot2 =  new PANOLENS.Infospot( 300, "pngwing.com.png", false );
+      infospot2.position.set( 9000.00, -865.23, -3996.49 );
+      infospot2.show();
+      infospot2.addEventListener( 'click', e => {
+        viewer.dispose();
+        const panorama2 = new PANOLENS.ImagePanorama( 'IMG_20220927_171231_00_026_2022-10-13_15-44-31_screenshot.jpg' );
+        viewer.add( panorama2 );
+      });
+      
+      const panorama1 = new PANOLENS.ImagePanorama( 'IMG_20220927_164639_00_002_2022-10-13_15-31-37_screenshot.jpg' );
+      panorama1.add( infospot1 );
+      panorama1.add( infospot2 );
+
+      viewer.add( panorama1 );
+    </script>
+  </body>
 </html>
