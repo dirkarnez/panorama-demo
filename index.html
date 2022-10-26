@@ -1,72 +1,305 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width, shrink-to-fit=no">
-    <style>
-      html, body {
-        margin: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        background-color: #000;
-      }
 
-      #desc-container {
-        max-width: 400px;
-        max-height: 400px;
-        min-width: 200px;
-        min-height: 250px;
-        background: #fff;
-        color: #000;
-        border-radius: 3px;
-        overflow: auto;
-        -webkit-overflow-scrolling: touch;
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+    content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width, shrink-to-fit=no">
+  <style>
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #000;
+    }
 
-        border-radius: .5em;
-        padding: 2.75em 2.5em;
-      }
-    </style>
-  </head>
+    #desc-container {
+      max-width: 400px;
+      max-height: 400px;
+      min-width: 200px;
+      min-height: 250px;
+      background: #fff;
+      color: #000;
+      border-radius: 3px;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
 
-  <body>
-    <div id="desc-container" class="data-card" style="display:none">
-      <header>
-        <h1>2010</h1>
-      </header>
-      <p style="font-size: 1.5rem;"> 
-        第二期廠房正式投產，同年產品拓展至美國市場
-      </p>
-      <p style="font-size: 1.5rem;"> 
-        2nd Phase factory in production, products entered US market
-      </p>
-    </div>
+      border-radius: .5em;
+      padding: 2.75em 2.5em;
+    }
+  </style>
+</head>
 
-    <script src="https://pchen66.github.io/js/three/three.min.js"></script>
-    <script src="https://pchen66.github.io/js/panolens/panolens.min.js"></script>
+<body>
+  <div id="desc-container" class="data-card" style="display:none">
+    <header>
+      <h1>2010</h1>
+    </header>
+    <p style="font-size: 1.5rem;">
+      第二期廠房正式投產，同年產品拓展至美國市場
+    </p>
+    <p style="font-size: 1.5rem;">
+      2nd Phase factory in production, products entered US market
+    </p>
+  </div>
 
-    <script>
-      const viewer = new PANOLENS.Viewer( { output: 'console', autoHideInfospot: false } );
+  <script src="https://pchen66.github.io/js/three/three.min.js"></script>
+  <script src="https://pchen66.github.io/js/panolens/panolens.min.js"></script>
 
-      const infospot1 =  new PANOLENS.Infospot( 300, PANOLENS.DataImage.Info, false );
-      infospot1.position.set( 5000.00, -665.23, -3996.49 );
-      infospot1.addHoverElement( document.getElementById( 'desc-container' ), 200 );
-      infospot1.show();
+  <script>
+    const svgToDataURL = svgStr => {
+      const encoded = encodeURIComponent(svgStr)
+        .replace(/'/g, '%27')
+        .replace(/"/g, '%22')
 
-      const infospot2 =  new PANOLENS.Infospot( 300, "pngwing.com.png", false );
-      infospot2.position.set( 9000.00, -865.23, -3996.49 );
-      infospot2.show();
-      infospot2.addEventListener( 'click', e => {
+      const header = 'data:image/svg+xml,'
+      const dataUrl = header + encoded
+
+      return dataUrl
+    }
+
+    function makeSVG(tag, attrs) {
+        var el= document.createElementNS('http://www.w3.org/2000/svg', tag);
+        for (var k in attrs){
+            if(k=="xlink:href"){
+                el.setAttributeNS('http://www.w3.org/1999/xlink', 'href', attrs[k]);
+            }else{
+                el.setAttribute(k, attrs[k]);
+            }
+        }
+        return el;
+    }
+    // { class:'map-tile', 'xlink:href':'map/xxx.jpg', width:'512px', height: '512px' x:'0', y:'0'});
+    const svg = makeSVG("svg", { height: "30", width: "200", viewBox: "0 0 100 100" });
+    const text = makeSVG("text", { x: "0", y: "15", fill: "red" });
+    svg.appendChild(text);
+    text.textContent="123";
+
+    const sign = svgToDataURL(`<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100">
+ <title>SVG logo</title>
+  <a xlink:href="http://www.w3.org/Graphics/SVG/" xlink:title="W3C SVG Working Group home page" target="_parent">
+    <rect width="100" height="100" fill="#FF9900" rx="4" ry="4"/>
+    <rect width="50" height="50" fill="#FFB13B" rx="4" ry="4"/>
+    <rect width="50" height="50" x="50" y="50" fill="#de8500" rx="4" ry="4"/>
+    <g fill="#ff9900">
+      <circle cx="50" cy="18.4" r="18.4"/>
+      <circle cx="72.4" cy="27.6" r="18.4"/>
+      <circle cx="81.6" cy="50" r="18.4"/>
+      <circle cx="72.4" cy="72.4" r="18.4"/>
+      <circle cx="50" cy="81.6" r="18.4"/>
+      <circle cx="27.6" cy="72.4" r="18.4"/>
+      <circle cx="18.4" cy="50" r="18.4"/>
+      <circle cx="27.6" cy="27.6" r="18.4"/>
+    </g>
+    <path d="M63.086 18.385c0-7.227-5.859-13.086-13.1-13.086-7.235 0-13.096 5.859-13.096 13.086-5.1-5.11-13.395-5.11-18.497 0-5.119 5.12-5.119 13.408 0 18.524-7.234 0-13.103 5.859-13.103 13.085 0 7.23 5.87 13.098 13.103 13.098-5.119 5.11-5.119 13.395 0 18.515 5.102 5.104 13.397 5.104 18.497 0 0 7.228 5.86 13.083 13.096 13.083 7.24 0 13.1-5.855 13.1-13.083 5.118 5.104 13.416 5.104 18.513 0 5.101-5.12 5.101-13.41 0-18.515 7.216 0 13.081-5.869 13.081-13.098 0-7.227-5.865-13.085-13.081-13.085 5.101-5.119 5.101-13.406 0-18.524-5.097-5.11-13.393-5.11-18.513 0z"/>
+    <path fill="#ffffff" d="M55.003 23.405v14.488L65.26 27.64c0-1.812.691-3.618 2.066-5.005 2.78-2.771 7.275-2.771 10.024 0 2.771 2.766 2.771 7.255 0 10.027-1.377 1.375-3.195 2.072-5.015 2.072L62.101 44.982H76.59c1.29-1.28 3.054-2.076 5.011-2.076 3.9 0 7.078 3.179 7.078 7.087 0 3.906-3.178 7.088-7.078 7.088-1.957 0-3.721-.798-5.011-2.072H62.1l10.229 10.244c1.824 0 3.642.694 5.015 2.086 2.774 2.759 2.774 7.25 0 10.01-2.75 2.774-7.239 2.774-10.025 0-1.372-1.372-2.064-3.192-2.064-5.003L55 62.094v14.499c1.271 1.276 2.084 3.054 2.084 5.013 0 3.906-3.177 7.077-7.098 7.077-3.919 0-7.094-3.167-7.094-7.077 0-1.959.811-3.732 2.081-5.013V62.094L34.738 72.346c0 1.812-.705 3.627-2.084 5.003-2.769 2.772-7.251 2.772-10.024 0-2.775-2.764-2.775-7.253 0-10.012 1.377-1.39 3.214-2.086 5.012-2.086l10.257-10.242H23.414c-1.289 1.276-3.072 2.072-5.015 2.072-3.917 0-7.096-3.18-7.096-7.088s3.177-7.087 7.096-7.087c1.94 0 3.725.796 5.015 2.076h14.488L27.646 34.736c-1.797 0-3.632-.697-5.012-2.071-2.775-2.772-2.775-7.26 0-10.027 2.773-2.771 7.256-2.771 10.027 0 1.375 1.386 2.083 3.195 2.083 5.005l10.235 10.252V23.407c-1.27-1.287-2.082-3.053-2.082-5.023 0-3.908 3.175-7.079 7.096-7.079 3.919 0 7.097 3.168 7.097 7.079-.002 1.972-.816 3.735-2.087 5.021z"/>
+    <g>
+      <path fill="#000000" d="M5.3 50h89.38v40q0 5-5 5H10.3q-5 0-5-5Z"/>
+      <path fill="#3f3f3f" d="M14.657 54.211h71.394c2.908 0 5.312 2.385 5.312 5.315v17.91c-27.584-3.403-54.926-8.125-82.011-7.683V59.526c.001-2.93 2.391-5.315 5.305-5.315z"/>
+      <path fill="#ffffff" stroke="#000000" stroke-width=".5035" d="M18.312 72.927c-2.103-2.107-3.407-5.028-3.407-8.253 0-6.445 5.223-11.672 11.666-11.672 6.446 0 11.667 5.225 11.667 11.672h-6.832c0-2.674-2.168-4.837-4.835-4.837-2.663 0-4.838 2.163-4.838 4.837 0 1.338.549 2.536 1.415 3.42.883.874 2.101 1.405 3.423 1.405v.012c3.232 0 6.145 1.309 8.243 3.416 2.118 2.111 3.424 5.034 3.424 8.248 0 6.454-5.221 11.68-11.667 11.68-6.442 0-11.666-5.222-11.666-11.68h6.828c0 2.679 2.175 4.835 4.838 4.835 2.667 0 4.835-2.156 4.835-4.835 0-1.329-.545-2.527-1.429-3.407-.864-.88-2.082-1.418-3.406-1.418-3.23 0-6.142-1.314-8.259-3.423zM61.588 53.005l-8.244 39.849h-6.85l-8.258-39.849h6.846l4.838 23.337 4.835-23.337zM73.255 69.513h11.683v11.664c0 6.452-5.226 11.678-11.669 11.678-6.441 0-11.666-5.226-11.666-11.678V64.676h-.017C61.586 58.229 66.827 53 73.253 53c6.459 0 11.683 5.225 11.683 11.676h-6.849c0-2.674-2.152-4.837-4.834-4.837-2.647 0-4.82 2.163-4.82 4.837v16.501c0 2.675 2.173 4.837 4.82 4.837 2.682 0 4.834-2.162 4.834-4.827V76.348h-4.834l.002-6.835z"/>
+    </g>
+  </a>
+</svg>
+
+`);
+    debugger;
+    const viewer = new PANOLENS.Viewer({ output: 'console', autoHideInfospot: false });
+
+    // const infospot1 =  new PANOLENS.Infospot( 300, PANOLENS.DataImage.Info, false );
+    // infospot1.position.set( 5000.00, -665.23, -3996.49 );
+    // infospot1.addHoverElement( document.getElementById( 'desc-container' ), 200 );
+    // infospot1.show();
+
+    function makeInfoSpot(x, y, z, callback) {
+      const infospot = new PANOLENS.Infospot(300, sign, false);
+      infospot.position.set(x, y, z);
+      infospot.show();
+      infospot.addEventListener('click', e => {
         viewer.dispose();
-        const panorama2 = new PANOLENS.ImagePanorama( 'IMG_20220927_171231_00_026_2022-10-13_15-44-31_screenshot.jpg' );
-        viewer.add( panorama2 );
+        viewer.add(callback());
       });
-      
-      const panorama1 = new PANOLENS.ImagePanorama( 'IMG_20220927_164639_00_002_2022-10-13_15-31-37_screenshot.jpg' );
-      panorama1.add( infospot1 );
-      panorama1.add( infospot2 );
+      return infospot;
+    }
 
-      viewer.add( panorama1 );
-    </script>
-  </body>
+    function one() {
+      const panorama1 = new PANOLENS.ImagePanorama('./done/1.jpg');
+      panorama1.add(makeInfoSpot(5000.00, -865.23, -3996.49, two));
+      panorama1.add(makeInfoSpot(6000.00, -565.23, 300, three));
+      return panorama1;
+    }
+
+    function two() {
+      const panorama = new PANOLENS.ImagePanorama('./done/2.jpg');
+      panorama.add(makeInfoSpot(5000.00, -865.23, -3996.49, one));
+      return panorama;
+    }
+
+    function three() {
+      // 4
+      const panorama = new PANOLENS.ImagePanorama('./done/3.jpg');
+      panorama.add(makeInfoSpot(5000.00, -865.23, -3996.49, four));
+      return panorama;
+    }
+
+    function four() {
+      // 5, 6, 9
+      const panorama = new PANOLENS.ImagePanorama('./done/4.jpg');
+      panorama.add(makeInfoSpot(5000.00, -865.23, -3996.49, five));
+      panorama.add(makeInfoSpot(6000.00, -865.23, -3996.49, six));
+      panorama.add(makeInfoSpot(7000.00, -865.23, -3996.49, nine));
+      return panorama;
+    }
+
+    function five() {
+      // 4, 9
+      const panorama = new PANOLENS.ImagePanorama('./done/5.jpg');
+      panorama.add(makeInfoSpot(5000.00, -865.23, -3996.49, four));
+      panorama.add(makeInfoSpot(6000.00, -865.23, -3996.49, nine));
+      return panorama;
+    }
+
+    function six() {
+      // 4, 7
+      const panorama = new PANOLENS.ImagePanorama('./done/6.jpg');
+      panorama.add(makeInfoSpot(5000.00, -865.23, -3996.49, four));
+      panorama.add(makeInfoSpot(6000.00, -865.23, -3996.49, seven));
+      return panorama;
+    }
+
+    function seven() {
+      // 8
+      const panorama = new PANOLENS.ImagePanorama('./done/7.jpg');
+      panorama.add(makeInfoSpot(5000.00, -865.23, -3996.49, eight));
+      return panorama;
+    }
+
+    function eight() {
+      // 7
+      const panorama = new PANOLENS.ImagePanorama('./done/8.jpg');
+      panorama.add(makeInfoSpot(5000.00, -865.23, -3996.49, seven));
+      return panorama;
+    }
+
+    function nine() {
+      // 5, 10
+      const panorama = new PANOLENS.ImagePanorama('./done/9.jpg');
+      panorama.add(makeInfoSpot(5000.00, -865.23, -3996.49, five));
+      panorama.add(makeInfoSpot(6000.00, -865.23, -3996.49, ten));
+      panorama.add(makeInfoSpot(7000.00, -865.23, -3996.49, thirteen));
+      return panorama;
+    }
+
+    function ten() {
+      // 9, 11
+      const panorama = new PANOLENS.ImagePanorama('./done/10.jpg');
+      panorama.add(makeInfoSpot(5000.00, -865.23, -3996.49, nine));
+      panorama.add(makeInfoSpot(6000.00, -865.23, -3996.49, eleven));
+      return panorama;
+    }
+
+    function eleven() {
+      // 10
+      const panorama = new PANOLENS.ImagePanorama('./done/11.jpg');
+      panorama.add(makeInfoSpot(5000.00, -865.23, -3996.49, ten));
+      return panorama;
+    }
+
+    function twelve() {
+      // 13
+      const panorama = new PANOLENS.ImagePanorama('./done/12.jpg');
+      panorama.add(makeInfoSpot(5000.00, -865.23, -3996.49, thirteen));
+      return panorama;
+    }
+
+    function thirteen() {
+      // 9, 12
+      const panorama = new PANOLENS.ImagePanorama('./done/13.jpg');
+      panorama.add(makeInfoSpot(5000.00, -865.23, -3996.49, nine));
+      panorama.add(makeInfoSpot(6000.00, -865.23, -3996.49, twelve));
+      return panorama;
+    }
+
+    function forteen() {
+      // 4, 15, 20
+      const panorama = new PANOLENS.ImagePanorama('./done/14.jpg');
+      panorama.add(makeInfoSpot(5000.00, -865.23, -3996.49, four));
+      panorama.add(makeInfoSpot(6000.00, -865.23, -3996.49, fifteen));
+      panorama.add(makeInfoSpot(7000.00, -865.23, -3996.49, twenty));
+      return panorama;
+    }
+    
+    function fifteen() {
+      //  14, 16, 17
+      const panorama = new PANOLENS.ImagePanorama('./done/15.jpg');
+      panorama.add(makeInfoSpot(5000.00, -865.23, -3996.49, forteen));
+      panorama.add(makeInfoSpot(6000.00, -865.23, -3996.49, sixteen));
+      panorama.add(makeInfoSpot(7000.00, -865.23, -3996.49, seventeen));
+      return panorama;
+    }
+
+    
+    function sixteen() {
+      // 15
+      const panorama = new PANOLENS.ImagePanorama('./done/16.jpg');
+      panorama.add(makeInfoSpot(5000.00, -865.23, -3996.49, fifteen));
+      return panorama;
+    }
+
+    
+    function seventeen() {
+      // 15, 18
+      const panorama = new PANOLENS.ImagePanorama('./done/17.jpg');
+      panorama.add(makeInfoSpot(5000.00, -865.23, -3996.49, fifteen));
+      panorama.add(makeInfoSpot(6000.00, -865.23, -3996.49, eighteen));
+      return panorama;
+    }
+
+    
+    function eighteen() {
+      // 17, 19
+      const panorama = new PANOLENS.ImagePanorama('./done/18.jpg');
+      panorama.add(makeInfoSpot(5000.00, -865.23, -3996.49, seventeen));
+      panorama.add(makeInfoSpot(6000.00, -865.23, -3996.49, nineteen));
+      return panorama;
+    }
+
+    function nineteen() {
+      // 18
+      const panorama = new PANOLENS.ImagePanorama('./done/19.jpg');
+      panorama.add(makeInfoSpot(5000.00, -865.23, -3996.49, eighteen));
+      return panorama;
+    }
+    
+    function twenty() {
+      // 14, 21, 22
+      const panorama = new PANOLENS.ImagePanorama('./done/20.jpg');
+      panorama.add(makeInfoSpot(5000.00, -865.23, -3996.49, forteen));
+      panorama.add(makeInfoSpot(6000.00, -865.23, -3996.49, twentyone));
+      panorama.add(makeInfoSpot(7000.00, -865.23, -3996.49, twentytwo));
+      return panorama;
+    }
+
+    
+    function twentyone() {
+      // 20
+      const panorama = new PANOLENS.ImagePanorama('./done/21.jpg');
+      panorama.add(makeInfoSpot(5000.00, -865.23, -3996.49, twenty));
+      return panorama;
+    }
+
+    
+    function twentytwo() {
+      // 20
+      const panorama = new PANOLENS.ImagePanorama('./done/22.jpg');
+      panorama.add(makeInfoSpot(5000.00, -865.23, -3996.49, twenty));
+      return panorama;
+    }
+
+    viewer.add(one());
+  </script>
+</body>
+
 </html>
