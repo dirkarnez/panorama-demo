@@ -29,6 +29,8 @@
       border-radius: .5em;
       padding: 2.75em 2.5em;
     }
+
+
   </style>
 </head>
 
@@ -105,7 +107,6 @@
 </svg>
 
 `);
-    debugger;
     const viewer = new PANOLENS.Viewer({ output: 'console', autoHideInfospot: false });
 
     // const infospot1 =  new PANOLENS.Infospot( 300, PANOLENS.DataImage.Info, false );
@@ -113,13 +114,38 @@
     // infospot1.addHoverElement( document.getElementById( 'desc-container' ), 200 );
     // infospot1.show();
 
+
     function makeInfoSpot(x, y, z, callback) {
       const infospot = new PANOLENS.Infospot(300, sign, false);
       infospot.position.set(x, y, z);
       infospot.show();
       infospot.addEventListener('click', e => {
+        // show
+        const div = document.createElement("div")
+        div.style.width = "100%";
+        div.style.height = "100%";
+        div.style.backgroundColor = "black";
+        div.style.cursor = "default";
+        div.style.color = "white";
+        div.innerText = "loading";
+        div.style.position = "absolute";
+        div.style.top = "0px";
+        div.style.left = "0px";
+        div.style.zIndex = "999";
+        div.style.display = "flex";
+        div.style.alignItems = "center";
+        div.style.justifyContent = "center";
+        div.style.fontFamily = "sans-serif";
+        div.style.fontSize = "2rem";
+        document.body.appendChild(div);
         viewer.dispose();
-        viewer.add(callback());
+        const newScene = callback();
+        newScene.addEventListener( "load", function () {
+          document.body.removeChild(div);
+        });
+        
+        viewer.addPanoramaEventListener(newScene)
+        viewer.add(newScene);
       });
       return infospot;
     }
